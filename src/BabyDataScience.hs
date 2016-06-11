@@ -5,7 +5,6 @@ module BabyDataScience
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
 import Data.Char
-import Data.Maybe
 import Data.List
 import Data.Ord
 
@@ -17,6 +16,7 @@ type NewEntry = (Rating, Count)
 type MovingAverage = (Rating, Count)
 type ResultSet = M.Map T.Text MovingAverage
 
+emptyResultSet :: M.Map k a
 emptyResultSet = M.empty
 
 learn :: ResultSet -> T.Text -> ResultSet 
@@ -42,22 +42,22 @@ getRating :: ResultSet -> Words -> Rating
 getRating resultSet = uncurry (/) . foldr (calculateRating resultSet) (0.0, 0.0) 
 
 calculateRating :: ResultSet -> T.Text -> (Sum, Count) -> (Sum, Count) 
-calculateRating resultSet word (sum, count) =
+calculateRating resultSet word (total, count) =
     case M.lookup word resultSet of
-      Nothing -> (sum, count)
-      Just (n, _) ->  (sum + n, succ count)
+      Nothing -> (total, count)
+      Just (n, _) ->  (total + n, succ count)
 
 parseValidText :: T.Text -> [(Rating, Words)]
 parseValidText = map toStructure . filter hasRating . T.lines
   where hasRating = isDigit . T.head
-        getRating = read . T.unpack . T.take 1
-        toStructure x = (getRating x, normalise (T.drop 1 x)) 
+        rating = read . T.unpack . T.take 1
+        toStructure x = (rating x, normalise (T.drop 1 x)) 
 
 normalise :: T.Text -> Words
 normalise = T.words . T.toCaseFold
 
 processLine :: (Rating, Words) -> ResultSet -> ResultSet
-processLine (rating, words) resultSet = foldr (processWord rating) resultSet words
+processLine (rating, wordList) resultSet = foldr (processWord rating) resultSet wordList
 
 processWord :: Rating -> T.Text -> ResultSet -> ResultSet 
 processWord rating word = M.insertWith calculateMovingAverage word (rating, 1.0)

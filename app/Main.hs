@@ -13,19 +13,17 @@ data Command = Learn FilePath
              | Stats 
              | Error 
 
-trainingFile = "BabyDataScienceTrainingState"
-tempFile = "BabyDataScienceTrainingState.tmp"
+trainingState = "BabyDataScienceTrainingState"
+tempFile = trainingState ++ ".tmp"
 
 main :: IO ()
 main = do
     args <- getArgs
     case parseArgs args of
       Tweak file -> tweak file
-      Stats -> printStats trainingFile
-      Learn file -> do
-        goLearn file 
-        printStats trainingFile
-      _ -> putStrLn "Not implemented yet!"
+      Stats -> printStats trainingState
+      Learn file -> goLearn file
+      _ -> putStrLn "learn <filename> | tweak <filename> | stats"
 
 parseArgs :: [String] -> Command
 parseArgs ("learn":fileName:_) = Learn fileName
@@ -37,18 +35,18 @@ goLearn :: String -> IO ()
 goLearn file = do
     trainingData <- T.IO.readFile file
     let result = learn emptyResultSet trainingData
-    writeFile trainingFile (show result)
+    writeFile trainingState (show result)
 
 tweak :: String -> IO ()
 tweak file = do
-    rawResultSet <- S.readFile trainingFile
+    rawResultSet <- S.readFile trainingState
     reviews <- T.IO.readFile file
     let resultSet = read rawResultSet :: ResultSet
     let newResults = getResults resultSet reviews
     tweakedResults <- tweakResults newResults
     let newResultSet = learn resultSet tweakedResults
     writeFile tempFile (show newResultSet)
-    renameFile tempFile trainingFile
+    renameFile tempFile trainingState
 
 tweakResults :: [(Int, T.Text)] -> IO T.Text
 tweakResults newResults = do
