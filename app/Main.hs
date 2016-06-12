@@ -59,9 +59,9 @@ getCorrectResult (rating, entry) = do
     putStrLn "Entry:"
     putStrLn (T.unpack entry)
     putStrLn "Is the rating correct? [y|n]"
-    answer <- readLn :: IO Char
+    answer <- getLine
     case answer of
-      'y' -> return entry
+      ('y':_) -> return entry
       _ -> do
         putStrLn "Enter Correct Rating: "
         n <- readLn :: IO Int
