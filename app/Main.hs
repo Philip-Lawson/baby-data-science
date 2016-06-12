@@ -58,9 +58,14 @@ getCorrectResult (rating, entry) = do
     putStrLn ("Rating: " ++ show rating)
     putStrLn "Entry:"
     putStrLn (T.unpack entry)
-    putStrLn "Enter Correct Rating: "
-    n <- readLn :: IO Int
-    return (T.cons (C.intToDigit n) entry)
+    putStrLn "Is the rating correct? [y|n]"
+    answer <- readLn :: IO Char
+    case answer of
+      'y' -> return entry
+      _ -> do
+        putStrLn "Enter Correct Rating: "
+        n <- readLn :: IO Int
+        return (T.cons (C.intToDigit n) entry)
 
 printStats :: String -> IO ()
 printStats file = do

@@ -16,7 +16,7 @@ type NewEntry = (Rating, Count)
 type MovingAverage = (Rating, Count)
 type ResultSet = M.Map T.Text MovingAverage
 
-emptyResultSet :: M.Map k a
+emptyResultSet :: ResultSet
 emptyResultSet = M.empty
 
 learn :: ResultSet -> T.Text -> ResultSet 
@@ -39,10 +39,11 @@ getResult resultSet entry = (rating, entry)
     where rating = round $ getRating resultSet $ normalise entry
 
 getRating :: ResultSet -> Words -> Rating
-getRating resultSet = uncurry (/) . foldr (calculateRating resultSet) (0.0, 0.0) 
+getRating resultSet words = rating / total 
+    where (rating, total) = foldr (getTotals resultSet) (0.0, 0.0) words
 
-calculateRating :: ResultSet -> T.Text -> (Sum, Count) -> (Sum, Count) 
-calculateRating resultSet word (total, count) =
+getTotals :: ResultSet -> T.Text -> (Sum, Count) -> (Sum, Count) 
+getTotals resultSet word (total, count) =
     case M.lookup word resultSet of
       Nothing -> (total, count)
       Just (n, _) ->  (total + n, succ count)
