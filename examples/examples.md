@@ -136,7 +136,7 @@ let do_thingy list =
     |> List.reduce (fun x y -> x + y)
 ```
 
-#### Haskell
+##### Haskell
 ``` haskell
 do_thingy = foldr (+) 0 . filter (<10) . map (+1)
 ```
