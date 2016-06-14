@@ -20,9 +20,9 @@ main :: IO ()
 main = do
     args <- getArgs
     case parseArgs args of
+      Learn file -> goLearn file
       Tweak file -> tweak file
       Stats -> printStats trainingState
-      Learn file -> goLearn file
       _ -> putStrLn "learn <filename> | tweak <filename> | stats"
 
 parseArgs :: [String] -> Command

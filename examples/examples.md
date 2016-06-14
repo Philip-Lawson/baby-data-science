@@ -116,3 +116,27 @@ def add(a, b):
 add :: Num a => a -> a -> a
 add = addThree 0
 ```
+
+#### Piping
+
+##### Elixir
+``` elixir
+def do_thingy(list) do
+  Enum.map list, (fn (x) -> x + 1 end)
+  |> Enum.filter (fn (x) -> x < 10 end)
+  |> Enum.reduce (fn (x, y) -> x + y end)
+end
+```
+
+##### F#
+``` f#
+let do_thingy list =
+    List.map list (fun x -> x + 1)
+    |> List.filter (fun x -> x < 10)
+    |> List.reduce (fun x y -> x + y)
+```
+
+#### Haskell
+``` haskell
+do_thingy list = foldr (+) 0 . filter (<10) . map (+1) list
+```
