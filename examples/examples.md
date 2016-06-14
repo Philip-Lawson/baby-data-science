@@ -138,5 +138,5 @@ let do_thingy list =
 
 #### Haskell
 ``` haskell
-do_thingy list = foldr (+) 0 . filter (<10) . map (+1) list
+do_thingy = foldr (+) 0 . filter (<10) . map (+1)
 ```
