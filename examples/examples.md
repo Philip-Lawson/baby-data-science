@@ -122,9 +122,9 @@ add = addThree 0
 ##### Elixir
 ``` elixir
 def do_thingy(list) do
-  Enum.map list, (fn (x) -> x + 1 end)
-  |> Enum.filter (fn (x) -> x < 10 end)
-  |> Enum.reduce (fn (x, y) -> x + y end)
+  Enum.map(list, fn (x) -> x + 1 end)
+  |> Enum.filter(fn (x) -> x < 10 end)
+  |> Enum.reduce(fn (x, y) -> x + y end)
 end
 ```
 
