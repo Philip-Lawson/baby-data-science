@@ -128,7 +128,7 @@ def do_thingy(list) do
 end
 ```
 
-##### F\#
+##### F Sharp
 ``` f#
 let do_thingy list =
     List.map list (fun x -> x + 1)
